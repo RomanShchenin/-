@@ -1,0 +1,51 @@
+import java.io.*;
+
+public class moving average {
+    public static void main(String args[]) throws IOException {
+
+        BufferedReader bef_read = null;
+        bef_read = new BufferedReader(new FileReader("C://Users//Roman//OneDrive//Акселерометры//АКС_Z_вперед.txt"));
+
+        String line;
+        int number = 0;
+        int counter=0;
+
+        double average_value=0;
+
+        double[] mas = new double[400]; // массив для записи и последующего использования первых четырехсот значений
+
+        while ((line = bef_read.readLine()) != null) {
+            number++;
+            double chislo= Double.parseDouble(line);
+
+            if(number<=400){
+                average_value = average_value+chislo;
+                mas[counter] = chislo;
+                counter++;
+            }
+            if(number==400){
+                double srednee = average_value/400;
+                Input(srednee);
+            }
+            if(number>400){
+                counter=0;
+                double srednee = (average_value + chislo - mas [counter])/400;
+                Input(srednee);
+                mas [counter] = chislo;
+                counter++;
+                if(counter==400) counter=0;
+            }
+            System.out.println(number);
+        }
+    }
+
+    private static void Input(double srednee) throws IOException {
+        String word = Double.toString(srednee);
+        FileWriter writer = null;
+
+        writer = new FileWriter("C://Users//Roman//OneDrive//Акселерометры//АКС_Z_вперед_среднее.txt", true);
+        BufferedWriter bufferWriter = new BufferedWriter(writer);
+        bufferWriter.write(word);
+        bufferWriter.close();
+    }
+}
